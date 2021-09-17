@@ -1,16 +1,20 @@
 import React from 'react';
 
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Router, Switch } from 'react-router-dom';
+
+import { historyConfig } from './config';
 import { Login } from './pages/login/Login';
-import { Temp } from './pages/login/Temp';
+import { Home } from './pages/home/home';
 
 export function Routes() {
     return (
-        <Switch>
-            <Redirect to="/login" from="/" exact/>
+        <Router history={ historyConfig }>
+            <Switch>
+                <Redirect to="/login" from="/" exact/>
 
-            <Route path="/login" component={Login} exact/>
-            <Route path="/tmp" component={Temp} exact/>
-        </Switch>
+                <Route path="/login" component={ Login }/>
+                <Route path="/home" component={ Home }/>
+            </Switch>
+        </Router>
     )
 }

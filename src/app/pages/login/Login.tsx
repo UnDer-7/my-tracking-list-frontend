@@ -1,4 +1,5 @@
 import React from 'react';
+
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 
 export function Login() {
@@ -38,10 +39,10 @@ export function Login() {
             <br/>
             <br/>
             <GoogleLogin
-                clientId={clientID}
+                clientId={ clientID }
                 buttonText="Login"
-                onSuccess={onSuccess('http://localhost:8080/v1/auth/login/google')}
-                onFailure={onFailure}
+                onSuccess={ onSuccess('http://localhost:8080/v1/auth/login/google') }
+                onFailure={ onFailure }
                 cookiePolicy="single_host_origin"
             />
         </>

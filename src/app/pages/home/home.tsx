@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react';
+import { Typography } from '@mui/material';
 
 export function Home(): ReactElement {
     return (
-        <h1>HOME!!</h1>
+        <Typography variant="h2">HOME!!!</Typography>
     )
 }

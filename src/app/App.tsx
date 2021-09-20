@@ -6,10 +6,14 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 import { Routes } from './Routes';
+import { CssBaseline } from '@mui/material';
 
 function App() {
   return (
-      <Routes/>
+      <>
+        <CssBaseline />
+        <Routes/>
+      </>
   );
 }
 

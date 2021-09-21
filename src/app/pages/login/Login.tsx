@@ -7,22 +7,19 @@ import { Facebook, GitHub, Google } from '@mui/icons-material';
 export function Login(): ReactElement {
     const clientID = process.env['REACT_APP_GOOGLE_CLIENT_ID'] as string;
 
-    function onSuccess(url: string): (res: (GoogleLoginResponse | GoogleLoginResponseOffline)) => void {
-        return (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-            fetch(url, {
-                method: 'POST',
-                body: JSON.stringify({
-                    token: (res as GoogleLoginResponse).tokenId,
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }).then(res => res.json())
-                .then(res => {
-                    console.log('REPONSE: ', res)
-                });
-        }
-
+    function onSuccess(res: GoogleLoginResponse | GoogleLoginResponseOffline): void {
+        fetch('http://localhost:8080/v1/auth/sign-in/google', {
+            method: 'POST',
+            body: JSON.stringify({
+                token: (res as GoogleLoginResponse).tokenId,
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(res => res.json())
+            .then(res => {
+                console.log('REPONSE: ', res)
+            });
     }
 
     function onFailure(res: any) {
@@ -54,7 +51,7 @@ export function Login(): ReactElement {
                         <div>
                             <GoogleLogin
                                 clientId={ clientID }
-                                onSuccess={ onSuccess('http://localhost:8080/v1/auth/create/google') }
+                                onSuccess={ onSuccess }
                                 onFailure={ onFailure }
                                 cookiePolicy="single_host_origin"
                                 render={({ onClick, disabled}) => (

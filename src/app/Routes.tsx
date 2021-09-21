@@ -3,8 +3,8 @@ import React from 'react';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 
 import { historyConfig } from './config';
-import { Login } from './pages/login/Login';
-import { Home } from './pages/home/home';
+import { Login } from './page/login/Login';
+import { Home } from './page/home/home';
 
 export function Routes() {
     return (

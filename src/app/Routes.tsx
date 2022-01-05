@@ -3,17 +3,17 @@ import React from 'react';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 
 import { historyConfig } from './config';
-import { Login } from './page/login/Login';
-import { Home } from './page/home/home';
+import { AuthRoutes} from "./page/auth/AuthRoutes";
+import {DashboardRoutes} from "./page/dashboards/DashboardRoutes";
+import {ProtectRoute} from "./components/ProtectRoute";
 
 export function Routes() {
     return (
         <Router history={ historyConfig }>
             <Switch>
-                <Redirect to="/login" from="/" exact/>
-
-                <Route path="/login" component={ Login }/>
-                <Route path="/home" component={ Home }/>
+                <Redirect to="/dashboard" from="/" exact/>
+                <Route path="/auth" component={ AuthRoutes } />
+                <ProtectRoute path="/dashboard" component={ DashboardRoutes } />
             </Switch>
         </Router>
     )

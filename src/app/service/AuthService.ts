@@ -1,34 +1,24 @@
-/**
- * @see <a href="https://github.com/keycloak/keycloak-documentation/blob/main/securing_apps/topics/oidc/javascript-adapter.adoc">
- *     keycloak doc
- *     </a>
- */
-import Keycloak from 'keycloak-js';
+// export const AuthService = {
+//     doLogin: () => console.log("Do Login"),
+//     doLogout: () => console.log("Do logout"),
+//     isLoggedIn: () => false,
+//     getToken: () => "",
+//     updateToken: (successCallback: () => void) => () => console.log("Refresh")
+// };
 
-const kc = Keycloak({
-    url: 'http://localhost:8180/auth/',
-    realm: 'dev-local',
-    clientId: 'my-tracking-list-frontend',
-});
+import { AuthResource } from '../resources/AuthResource';
+import { LocalStorageKeys, LocalStorageService } from './LocalStorageService';
 
-function initKeycloak(onAuthenticatedCallback: () => void): void {
-    kc.init({
-        onLoad: 'check-sso',
-        silentCheckSsoRedirectUri: `${window.location.origin}/silent-check-sso.html`,
-        pkceMethod: 'S256',
-    })
-        .then(onAuthenticatedCallback)
-        .catch(console.error);
+export class AuthService {
+    public static registerUser(authCode: string): void {
+        AuthResource.registerUser(authCode)
+            .then(value => {
+                LocalStorageService.save(LocalStorageKeys.JWT_TOKEN, value.tokenEncoded);
+                LocalStorageService.save(LocalStorageKeys.REFRESH_TOKEN, value.refreshTokenEncoded);
+                return value;
+            })
+            .then(value => {
+
+            })
+    }
 }
-
-export const AuthService = {
-    initKeycloak,
-    doLogin: kc.login,
-    doLogout: kc.logout,
-    isLoggedIn: () => !!kc.token,
-    getToken: () => kc.token,
-    updateToken: (successCallback: () => void) => kc
-        .updateToken(5)
-        .then(successCallback)
-        .catch(kc.login)
-};

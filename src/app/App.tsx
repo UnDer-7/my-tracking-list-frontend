@@ -6,14 +6,27 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 import { Routes } from './Routes';
-import { CssBaseline } from '@mui/material';
+import { CssBaseline, useMediaQuery } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function App() {
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+    const theme = React.useMemo(
+        () => createTheme({
+            palette: { mode: prefersDarkMode ? 'dark' : 'light' }
+        }),
+        [prefersDarkMode]
+    );
+
   return (
-      <>
-        <CssBaseline />
-        <Routes/>
-      </>
+      <ThemeProvider theme={theme}>
+          <GoogleOAuthProvider clientId="1028347055014-csos23ertvrdq38cmjg9h1bk5avl4ocv.apps.googleusercontent.com">
+              <CssBaseline />
+              <Routes/>
+          </GoogleOAuthProvider>
+      </ThemeProvider>
   );
 }
 

@@ -1,15 +1,16 @@
 import React, {ReactElement} from "react";
 import {Redirect, Route, RouteProps} from "react-router-dom";
-import {AuthService} from "../service/AuthService";
+import { AUTH_PREFIX_PATH } from '../page/auth/AuthRoutes';
 
 export function ProtectRoute(props: RouteProps): ReactElement {
-    if (AuthService.isLoggedIn()) {
+    // if (AuthService.isLoggedIn()) {
+    if (false) {
         return (
             <Route {...props} />
         )
     }
 
     return (
-        <Redirect to="/auth" />
+        <Redirect to={AUTH_PREFIX_PATH} />
     );
 }

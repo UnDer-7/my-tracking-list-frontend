@@ -1,17 +1,28 @@
 import HttpClient from "../config/HttpClient";
+import { TokenResponse } from './payloads/TokenResponse';
 
 export class AuthResource {
     private static readonly httpClient = HttpClient;
-    private static readonly apiUrl = process.env['REACT_APP_API_URL'] as string;
-    private static readonly url = `${AuthResource.apiUrl}/auth`;
+    private static readonly url = `${process.env['REACT_APP_API_URL']}/auth`;
 
-    public static registerUser(token: string): Promise<any> {
+    public static signIn(authCode: string): Promise<TokenResponse> {
         return AuthResource.httpClient
-            .post(`${AuthResource.url}/register`, { token });
+            .post(`${AuthResource.url}/google/sign-in`, {}, {
+                headers: { 'Auth-code': authCode }
+            });
     }
 
-    public static signIn(token: string): Promise<any> {
+    public static registerUser(authCode: string): Promise<TokenResponse> {
         return AuthResource.httpClient
-            .post(`${AuthResource.url}/sign-in`, { token });
+            .post(`${AuthResource.url}/google/register`, {}, {
+                headers: { 'Auth-code': authCode }
+            });
+    }
+
+    public static refreshToken(refreshToken: string): Promise<TokenResponse> {
+        return AuthResource.httpClient
+            .post(`${AuthResource.url}/google/refresh`, {}, {
+                headers: { 'Refresh-token': refreshToken }
+            });
     }
 }

@@ -1,5 +1,4 @@
 import axios, {AxiosRequestConfig} from "axios";
-import {AuthService} from "../service/AuthService";
 
 const httpClient = axios.create({
     headers: {
@@ -16,15 +15,15 @@ const httpClient = axios.create({
 //     return req;
 // })
 
-httpClient.interceptors.request.use((req) => {
-    if (AuthService.isLoggedIn()) {
-        const setHeaders = () => {
-            // @ts-ignore todo: fix
-            req.headers.Authorization = `Bearer ${AuthService.getToken()}`;
-            return Promise.resolve(req);
-        };
-
-        return AuthService.updateToken(setHeaders);
-    }
-})
+// httpClient.interceptors.request.use((req) => {
+//     if (AuthService.isLoggedIn()) {
+//         const setHeaders = () => {
+//             // @ts-ignore todo: fix
+//             req.headers.Authorization = `Bearer ${AuthService.getToken()}`;
+//             return Promise.resolve(req);
+//         };
+//
+//         return AuthService.updateToken(setHeaders);
+//     }
+// })
 export default httpClient;

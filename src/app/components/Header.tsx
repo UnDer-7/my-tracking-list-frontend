@@ -29,14 +29,14 @@ const closedMixin = (theme: Theme): CSSObject => ({
     },
 });
 
-export const DrawerHeader = styled('div')(({theme}) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-}));
+// export const DrawerHeader = styled('div')(({theme}) => ({
+//     display: 'flex',
+//     alignItems: 'center',
+//     justifyContent: 'flex-end',
+//     padding: theme.spacing(0, 1),
+//     // necessary for content to be below app bar
+//     ...theme.mixins.toolbar,
+// }));
 
 interface AppBarProps extends MuiAppBarProps {
     open?: boolean;
@@ -109,11 +109,11 @@ export function Header(): ReactElement {
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
-                <DrawerHeader>
+                {/*<DrawerHeader>*/}
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
                     </IconButton>
-                </DrawerHeader>
+                {/*</DrawerHeader>*/}
                 <Divider />
                 <MenuList />
             </Drawer>

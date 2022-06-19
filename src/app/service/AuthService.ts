@@ -17,8 +17,16 @@ export class AuthService {
         }
     }
 
-    public static executeLogin(): Promise<any> {
-        throw Error('Tem q implementar')
+    public static async executeLogin(authCode: string): Promise<Token> {
+        const { tokenEncoded, refreshTokenEncoded } = await AuthResource.signIn(authCode);
+        LocalStorageService.save(LocalStorageKeys.JWT_TOKEN, tokenEncoded);
+        LocalStorageService.save(LocalStorageKeys.REFRESH_TOKEN, refreshTokenEncoded);
+
+        return {
+            ...decodeJWT<Token>(tokenEncoded),
+            encodedToken: tokenEncoded,
+            encodedRefreshToken: refreshTokenEncoded,
+        }
     }
 
     public static executeLogout(): Promise<any> {

@@ -33,9 +33,9 @@ const initialState: CurrentUserState = {
     },
 };
 
-export const addNewUser = createAsyncThunk(
+export const addNewUserThunk = createAsyncThunk(
     'current-user/addNewUser',
-    async (authCode: string, { rejectWithValue, dispatch }) => {
+    async (authCode: string, { dispatch }) => {
         try {
             return await AuthService.registerUser(authCode);
         } catch (e) {
@@ -49,7 +49,26 @@ export const addNewUser = createAsyncThunk(
             return Promise.reject(e);
         }
     }
-)
+);
+
+export const doLoggingThunk = createAsyncThunk(
+    'current-user/doLogging',
+    async (authCode: string, { dispatch }) => {
+        try {
+            return await AuthService.executeLogin(authCode);
+        } catch (e) {
+            if (isServerErrorResponse(e)) {
+                console.warn('Server returned an error: ', e);
+                dispatch(addSnackBarError({ message: e.userMsg }))
+            } else {
+                console.error('Error while registering user. ', e);
+                dispatch(addSnackBarError({ message: 'Sorry, something went wrong' }))
+            }
+            return Promise.reject(e);
+        }
+    }
+);
+
 export const currentUserSlice = createSlice({
     name: 'current-user',
     initialState,
@@ -59,10 +78,10 @@ export const currentUserSlice = createSlice({
         }
     },
     extraReducers: (builder) => builder
-        .addCase(addNewUser.pending, (state) => {
+        .addCase(addNewUserThunk.pending, (state) => {
             state.status = 'loading';
         })
-        .addCase(addNewUser.fulfilled, (state, { payload }) => {
+        .addCase(addNewUserThunk.fulfilled, (state, { payload }) => {
             return {
                 status: 'successes',
                 email: payload.email,
@@ -76,7 +95,28 @@ export const currentUserSlice = createSlice({
                 }
             }
         })
-        .addCase(addNewUser.rejected, (state, action) => {
+        .addCase(addNewUserThunk.rejected, (state) => {
+            state.status = 'failed';
+        })
+
+        .addCase(doLoggingThunk.pending, (state) => {
+            state.status = 'loading';
+        })
+        .addCase(doLoggingThunk.fulfilled, (state, { payload }) => {
+            return {
+                status: 'successes',
+                email: payload.email,
+                name: payload.name,
+                locale: payload.locale,
+                token: {
+                    encodedToken: payload.encodedToken,
+                    encodedRefreshToken: payload.encodedRefreshToken,
+                    issuedAt: new Date(payload.iat * 1000).toISOString(),
+                    expirationTime: new Date(payload.exp * 1000).toISOString()
+                }
+            }
+        })
+        .addCase(doLoggingThunk.rejected, (state) => {
             state.status = 'failed';
         })
 })

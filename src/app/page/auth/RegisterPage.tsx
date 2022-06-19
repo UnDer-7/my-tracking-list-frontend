@@ -3,9 +3,10 @@ import { Button, Grid, Link, Typography } from '@mui/material';
 import { useRoutes } from '../../utils/hooks/useRoutes';
 import { CodeResponse, useGoogleLogin } from '@react-oauth/google';
 import { useAppDispatch, useAppSelector } from '../../utils/hooks/useRedux';
-import { addNewUser, selectStatus, setStatus } from '../../slice/CurrentUserSlice';
+import { addNewUserThunk, selectStatus, setStatus } from '../../slice/CurrentUserSlice';
 import { GoogleIcon } from '../../utils/components/Icons';
 import { BlockUI } from '../../utils/components/BlockUI';
+import { addSnackBarError } from '../../slice/SnackBarSlice';
 
 export function RegisterPage(): ReactElement {
     const { goToSignIn, goToHome } = useRoutes();
@@ -28,11 +29,12 @@ export function RegisterPage(): ReactElement {
     }, [dispatch, goToHome, requestStatus]);
 
     function onSuccess(res: Omit<CodeResponse, 'error' | 'error_description' | 'error_uri'>) {
-        dispatch(addNewUser(res.code))
+        dispatch(addNewUserThunk(res.code))
     }
 
     function onError(res: any) {
-        console.log('Err: ', res);
+        console.error('Error while communicating with Google ', res)
+        dispatch(addSnackBarError({ message: 'Error while communicating with Google'}))
     }
 
     return (

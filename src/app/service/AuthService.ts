@@ -3,6 +3,7 @@ import { LocalStorageKeys, LocalStorageService } from './LocalStorageService';
 import { decodeJWT } from '../utils/helpers/Helpers';
 import { Token } from '../utils/types/Token';
 import { isAfter } from 'date-fns';
+import { TokenResponse } from '../resources/payloads/TokenResponse';
 
 export class AuthService {
     public static async registerUser(authCode: string): Promise<Token> {
@@ -33,15 +34,39 @@ export class AuthService {
         throw Error('Tem q implementar')
     }
 
+    public static async executeRefreshToke(): Promise<TokenResponse> {
+        const jwt = LocalStorageService.getValue(LocalStorageKeys.JWT_TOKEN);
+        const refreshToken = LocalStorageService.getValue(LocalStorageKeys.REFRESH_TOKEN);
+
+        if (!jwt) {
+            console.error('JWT was not set in LocalStorage');
+            return Promise.reject('JWT was not set in LocalStorage');
+        }
+        if (!refreshToken) {
+            console.error('RefreshToken was not set in LocalStorage');
+            return Promise.reject('RefreshToken was not set in LocalStorage')
+        }
+
+        const response = await AuthResource.refreshToken(refreshToken);
+        LocalStorageService.save(LocalStorageKeys.JWT_TOKEN, response.tokenEncoded);
+        LocalStorageService.save(LocalStorageKeys.REFRESH_TOKEN, response.refreshTokenEncoded);
+        return response;
+    }
+
     public static isLoggedIn(): boolean {
         return !!LocalStorageService.getValue(LocalStorageKeys.JWT_TOKEN);
     }
 
-    private static isTokenExpired(jwtEncoded: string): boolean {
+    public static isTokenExpired(): boolean {
+        const jwtEncoded = LocalStorageService.getValue(LocalStorageKeys.JWT_TOKEN)
+        if (!jwtEncoded) return true;
+
         const currentTime = new Date();
         const token = decodeJWT<Token>(jwtEncoded)
         const tokenExp = new Date(token.exp * 1000);
 
-        return isAfter(tokenExp, currentTime)
+        console.log('exp: ', tokenExp);
+        console.log('curr: ', currentTime)
+        return isAfter(currentTime, tokenExp)
     }
 }

@@ -1,5 +1,4 @@
 import { SvgIcon, SvgIconProps } from '@mui/material';
-import GoogleIconSvg from '../svg/google-logo.svg'
 
 export function GoogleIcon(props?: SvgIconProps) {
     return (

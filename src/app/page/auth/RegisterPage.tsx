@@ -1,18 +1,18 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { Button, Grid, Link, Typography } from '@mui/material';
 import { useRoutes } from '../../utils/hooks/useRoutes';
 import { CodeResponse, useGoogleLogin } from '@react-oauth/google';
-import { useAppDispatch, useAppSelector } from '../../utils/hooks/useRedux';
-import { addNewUserThunk, selectStatus, setStatus } from '../../slice/CurrentUserSlice';
+import { useAppDispatch } from '../../utils/hooks/useRedux';
 import { GoogleIcon } from '../../utils/components/Icons';
 import { BlockUI } from '../../utils/components/BlockUI';
 import { addSnackBarError } from '../../slice/SnackBarSlice';
+import { AuthService } from '../../service/AuthService';
+import { isServerErrorResponse } from '../../utils/helpers/TypeGuards';
 
 export function RegisterPage(): ReactElement {
     const { goToSignIn, goToHome } = useRoutes();
     const dispatch = useAppDispatch();
-    const requestStatus = useAppSelector(selectStatus);
-    const canBlockUI = requestStatus === 'loading';
+    const [canBlockUI, setCanBlockUI] = useState(false)
 
     const login = useGoogleLogin({
         onSuccess,
@@ -20,21 +20,25 @@ export function RegisterPage(): ReactElement {
         flow: 'auth-code',
     });
 
-    useEffect(() => {
-        switch (requestStatus) {
-            case 'successes':
-                goToHome();
-                dispatch(setStatus('idle'));
-        }
-    }, [dispatch, goToHome, requestStatus]);
-
     function onSuccess(res: Omit<CodeResponse, 'error' | 'error_description' | 'error_uri'>) {
-        dispatch(addNewUserThunk(res.code))
+        setCanBlockUI(true);
+        AuthService.registerUser(res.code)
+            .then(() => goToHome())
+            .catch((err) => {
+                if (isServerErrorResponse(err)) {
+                    console.warn('Server returned an error: ', err);
+                    dispatch(addSnackBarError({ message: err.userMsg }))
+                } else {
+                    console.error('Error while registering user. ', err);
+                    dispatch(addSnackBarError({ message: 'Sorry, something went wrong' }))
+                }
+            })
+            .finally(() => setCanBlockUI(false))
     }
 
     function onError(res: any) {
         console.error('Error while communicating with Google ', res)
-        dispatch(addSnackBarError({ message: 'Error while communicating with Google'}))
+        dispatch(addSnackBarError({ message: 'Error while communicating with Google' }))
     }
 
     return (
@@ -53,9 +57,10 @@ export function RegisterPage(): ReactElement {
                     </Button>
                     <br/>
                     <br/>
-                    <Typography variant="caption">Already have an account? <Link underline="hover"
-                                                                                 onClick={ goToSignIn }>Sign
-                        in</Link></Typography>
+                    <Typography variant="caption">Already have an account? </Typography>
+                    <Link underline="hover" onClick={ goToSignIn } style={ { cursor: 'pointer' } }>
+                        <Typography variant="caption">Sign in</Typography>
+                    </Link>
                 </Grid>
             </Grid>
         </BlockUI>

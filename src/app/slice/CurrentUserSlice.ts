@@ -51,24 +51,6 @@ export const addNewUserThunk = createAsyncThunk(
     }
 );
 
-export const doLoggingThunk = createAsyncThunk(
-    'current-user/doLogging',
-    async (authCode: string, { dispatch }) => {
-        try {
-            return await AuthService.executeLogin(authCode);
-        } catch (e) {
-            if (isServerErrorResponse(e)) {
-                console.warn('Server returned an error: ', e);
-                dispatch(addSnackBarError({ message: e.userMsg }))
-            } else {
-                console.error('Error while registering user. ', e);
-                dispatch(addSnackBarError({ message: 'Sorry, something went wrong' }))
-            }
-            return Promise.reject(e);
-        }
-    }
-);
-
 export const currentUserSlice = createSlice({
     name: 'current-user',
     initialState,
@@ -96,27 +78,6 @@ export const currentUserSlice = createSlice({
             }
         })
         .addCase(addNewUserThunk.rejected, (state) => {
-            state.status = 'failed';
-        })
-
-        .addCase(doLoggingThunk.pending, (state) => {
-            state.status = 'loading';
-        })
-        .addCase(doLoggingThunk.fulfilled, (state, { payload }) => {
-            return {
-                status: 'successes',
-                email: payload.email,
-                name: payload.name,
-                locale: payload.locale,
-                token: {
-                    encodedToken: payload.encodedToken,
-                    encodedRefreshToken: payload.encodedRefreshToken,
-                    issuedAt: new Date(payload.iat * 1000).toISOString(),
-                    expirationTime: new Date(payload.exp * 1000).toISOString()
-                }
-            }
-        })
-        .addCase(doLoggingThunk.rejected, (state) => {
             state.status = 'failed';
         })
 })

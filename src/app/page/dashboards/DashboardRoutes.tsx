@@ -1,14 +1,26 @@
-import React, {ReactElement} from "react";
+import React, { ReactElement, useEffect } from 'react';
 import {Redirect, Route, RouteComponentProps, Switch} from "react-router-dom";
 import { Header} from "../../utils/components/Header";
 import {Box} from "@mui/material";
 import {AccountDetail} from "./account/AccountDetail";
 import {ListRoute} from "./list/ListRoute";
+import { UserResource } from '../../resources/UserResource';
+
+export const DASHBOARD_PREFIX_PATH = '/dashboard';
+export const DASHBOARD_LISTS_PATH = `${DASHBOARD_PREFIX_PATH}/lists`;
+export const DASHBOARD_ACCOUNT_DETAIL_PATH = `${DASHBOARD_PREFIX_PATH}/account-detail`;
 
 export function DashboardRoutes({ location: { pathname }, match: { path }}: RouteComponentProps): ReactElement {
     const canRedirectToListRoutes =
         pathname === path ||
         pathname === `${path}/`;
+
+    useEffect(() => {
+        UserResource.getCurrentUser()
+            .then(usr => {
+                console.log('USR: ', usr);
+            });
+    }, []);
 
     return (
         <Box sx={{ display: 'flex'}}>
@@ -17,16 +29,16 @@ export function DashboardRoutes({ location: { pathname }, match: { path }}: Rout
                 {/*<DrawerHeader />*/}
                 <Switch>
                     {
-                        canRedirectToListRoutes && (<Redirect to="/dashboard/lists" from={path} /> )
+                        canRedirectToListRoutes && (<Redirect to={DASHBOARD_LISTS_PATH} from={path} /> )
                     }
-                    <Route path="/dashboard/lists"
+                    <Route path={ DASHBOARD_LISTS_PATH }
                            component={ListRoute}
                     />
-                    <Route path="/dashboard/account-detail"
+                    <Route path={ DASHBOARD_ACCOUNT_DETAIL_PATH }
                            component={AccountDetail}
                     />
                 </Switch>
             </Box>
         </Box>
-    )
+    );
 }

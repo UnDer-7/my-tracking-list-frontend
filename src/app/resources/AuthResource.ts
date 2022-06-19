@@ -1,8 +1,8 @@
 import HttpClient from '../config/HttpClient';
 import { TokenResponse } from './payloads/TokenResponse';
-import axios from 'axios';
+import { Resource } from './shared/Resource';
 
-export class AuthResource {
+export class AuthResource extends Resource {
     private static readonly httpClient = HttpClient;
     private static readonly url = `${ process.env['REACT_APP_API_URL'] }/auth`;
 
@@ -11,7 +11,7 @@ export class AuthResource {
             .post(`${ AuthResource.url }/google/sign-in`, {}, {
                 headers: { 'Auth-code': authCode }
             })
-            .then(({ data }) => data)
+            .then(this.getBody)
             .catch(this.handleErr)
     }
 
@@ -20,7 +20,7 @@ export class AuthResource {
             .post(`${ AuthResource.url }/google/register`, {}, {
                 headers: { 'Auth-code': authCode }
             })
-            .then(({ data }) => data)
+            .then(this.getBody)
             .catch(this.handleErr)
     }
 
@@ -31,13 +31,5 @@ export class AuthResource {
             })
             .then(({ data }) => data)
             .catch(this.handleErr)
-    }
-
-    private static handleErr(err: any): Promise<any> {
-        if (axios.isAxiosError(err)) {
-            return Promise.reject(err.response?.data)
-        }
-        console.error('Error is not an AxiosError. ', err);
-        return Promise.reject(err);
     }
 }

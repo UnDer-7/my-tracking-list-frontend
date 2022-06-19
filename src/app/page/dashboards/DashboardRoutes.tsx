@@ -1,6 +1,6 @@
 import React, {ReactElement} from "react";
 import {Redirect, Route, RouteComponentProps, Switch} from "react-router-dom";
-import { Header} from "../../components/Header";
+import { Header} from "../../utils/components/Header";
 import {Box} from "@mui/material";
 import {AccountDetail} from "./account/AccountDetail";
 import {ListRoute} from "./list/ListRoute";

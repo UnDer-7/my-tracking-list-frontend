@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Button, Grid, Typography } from '@mui/material';
-import { useRoutes } from '../../hooks/useRoutes';
+import { useRoutes } from '../../utils/hooks/useRoutes';
 
 export function AuthPage(): ReactElement {
     const { goToRegister, goToSignIn } = useRoutes();
@@ -28,8 +28,6 @@ export function AuthPage(): ReactElement {
                     Register
                 </Button>
             </Grid>
-
         </Grid>
-
     );
 }

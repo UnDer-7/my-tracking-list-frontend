@@ -6,28 +6,31 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 import { Routes } from './Routes';
-import { CssBaseline, useMediaQuery } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Provider } from 'react-redux';
+import { store } from './config/Store';
+import { SnackbarProvider } from 'notistack';
+import { useIsMobile } from './utils/hooks/useIsMobile';
+import { useThemeConfiguration } from './utils/hooks/useThemeConfiguration';
 
 function App() {
-    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    const isMobile = useIsMobile();
+    const theme = useThemeConfiguration();
 
-    const theme = React.useMemo(
-        () => createTheme({
-            palette: { mode: prefersDarkMode ? 'dark' : 'light' }
-        }),
-        [prefersDarkMode]
+    return (
+        <Provider store={ store }>
+            <ThemeProvider theme={ theme }>
+                <SnackbarProvider maxSnack={ 3 } preventDuplicate={ false } dense={ isMobile }>
+                    <GoogleOAuthProvider clientId={ `${ process.env['REACT_APP_OAUTH_GOOGLE_CLIENT_ID'] }` }>
+                        <CssBaseline/>
+                        <Routes/>
+                    </GoogleOAuthProvider>
+                </SnackbarProvider>
+            </ThemeProvider>
+        </Provider>
     );
-
-  return (
-      <ThemeProvider theme={theme}>
-          <GoogleOAuthProvider clientId="1028347055014-csos23ertvrdq38cmjg9h1bk5avl4ocv.apps.googleusercontent.com">
-              <CssBaseline />
-              <Routes/>
-          </GoogleOAuthProvider>
-      </ThemeProvider>
-  );
 }
 
 export default App;

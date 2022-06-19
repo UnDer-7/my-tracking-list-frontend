@@ -1,5 +1,5 @@
 import {useHistory} from "react-router-dom";
-import { AUTH_REGISTER_PATH, AUTH_PREFIX_PATH, AUTH_SIGN_IN_PATH } from '../page/auth/AuthRoutes';
+import { AUTH_REGISTER_PATH, AUTH_PREFIX_PATH, AUTH_SIGN_IN_PATH } from '../../page/auth/AuthRoutes';
 
 export function useRoutes() {
     const history = useHistory();

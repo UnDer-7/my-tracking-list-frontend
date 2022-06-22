@@ -1,4 +1,4 @@
-import { AuthResource } from '../resources/AuthResource';
+import { AuthResource }  from '../resources/AuthResource';
 import { LocalStorageKeys, LocalStorageService } from './LocalStorageService';
 import { decodeJWT } from '../utils/helpers/Helpers';
 import { Token } from '../utils/types/Token';
@@ -35,13 +35,8 @@ export class AuthService {
     }
 
     public static async executeRefreshToke(): Promise<TokenResponse> {
-        const jwt = LocalStorageService.getValue(LocalStorageKeys.JWT_TOKEN);
         const refreshToken = LocalStorageService.getValue(LocalStorageKeys.REFRESH_TOKEN);
 
-        if (!jwt) {
-            console.error('JWT was not set in LocalStorage');
-            return Promise.reject('JWT was not set in LocalStorage');
-        }
         if (!refreshToken) {
             console.error('RefreshToken was not set in LocalStorage');
             return Promise.reject('RefreshToken was not set in LocalStorage')
@@ -65,8 +60,6 @@ export class AuthService {
         const token = decodeJWT<Token>(jwtEncoded)
         const tokenExp = new Date(token.exp * 1000);
 
-        console.log('exp: ', tokenExp);
-        console.log('curr: ', currentTime)
         return isAfter(currentTime, tokenExp)
     }
 }

@@ -1,14 +1,14 @@
-import React, {ReactElement, useState} from "react";
-import {Collapse, List, ListItem, ListItemButton, ListItemIcon, ListItemText} from "@mui/material";
+import React, { ReactElement, useState } from 'react';
+import { Collapse, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import {
-    ViewList as ViewListIcon,
     AccountCircle as AccountCircleIcon,
-    ExpandMore as ExpandMoreIcon,
-    ExpandLess as ExpandLessIcon,
     Add as AddIcon,
-} from "@mui/icons-material";
+    ExpandLess as ExpandLessIcon,
+    ExpandMore as ExpandMoreIcon,
+    ViewList as ViewListIcon,
+} from '@mui/icons-material';
 
-import {useRoutes} from "../hooks/useRoutes";
+import { useRoutes } from '../hooks/useRoutes';
 
 type MenuButtonProp = {
     name: string;
@@ -21,20 +21,20 @@ type MenuButtonProp = {
 function Expand({ isOpen }: { isOpen?: boolean }): ReactElement | null {
     if (isOpen === undefined) return null;
 
-    return isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />;
+    return isOpen ? <ExpandLessIcon/> : <ExpandMoreIcon/>;
 }
 
 function MenuButton(props: MenuButtonProp): ReactElement {
     const { name, onClick, icon, isOpen, subMenu } = props;
 
     return (
-        <ListItem key={name} onClick={onClick} disablePadding>
-            <ListItemButton sx={{ pl: subMenu ? 4 : null }}>
+        <ListItem key={ name } onClick={ onClick } disablePadding>
+            <ListItemButton sx={ { pl: subMenu ? 4 : null } }>
                 <ListItemIcon>
                     { icon }
                 </ListItemIcon>
-                <ListItemText primary={name} />
-                <Expand isOpen={isOpen} />
+                <ListItemText primary={ name }/>
+                <Expand isOpen={ isOpen }/>
             </ListItemButton>
         </ListItem>
     );
@@ -42,7 +42,7 @@ function MenuButton(props: MenuButtonProp): ReactElement {
 
 export function MenuList(): ReactElement {
     const { goToAccountDetail, lists: { goToDefaultListPage, goToNewListPage } } = useRoutes();
-    const [ isMyListOpen, setIsMyListOpen ] = useState(false);
+    const [isMyListOpen, setIsMyListOpen] = useState(false);
 
     function toggleMyList(): void {
         setIsMyListOpen(!isMyListOpen);
@@ -55,17 +55,17 @@ export function MenuList(): ReactElement {
 
     return (
         <List>
-            <MenuButton name="My Lists" onClick={onMyListClick} icon={ <ViewListIcon /> } isOpen={isMyListOpen}/>
-            <Collapse in={isMyListOpen} timeout="auto" unmountOnExit>
+            <MenuButton name="My Lists" onClick={ onMyListClick } icon={ <ViewListIcon/> } isOpen={ isMyListOpen }/>
+            <Collapse in={ isMyListOpen } timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                     <MenuButton name="New List"
-                                onClick={goToNewListPage}
-                                icon={ <AddIcon /> }
+                                onClick={ goToNewListPage }
+                                icon={ <AddIcon/> }
                                 subMenu
                     />
                 </List>
             </Collapse>
-            <MenuButton name="Account Detail" onClick={goToAccountDetail} icon={ <AccountCircleIcon />} />
+            <MenuButton name="Account Detail" onClick={ goToAccountDetail } icon={ <AccountCircleIcon/> }/>
         </List>
     )
 }

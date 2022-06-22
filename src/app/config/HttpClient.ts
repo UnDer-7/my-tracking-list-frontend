@@ -43,11 +43,11 @@ httpClient.interceptors.request.use(
 
 export function ConfigureHttpClient(url: string) {
     function urlFormatted(uri?: string): string {
-        if (!uri) return url.replace(/([^:]\/)\/+/g, "$1");
+        if (!uri) return url.replace(/([^:]\/)\/+/g, '$1');
 
         // remove multiple forward slashes
         // source: https://stackoverflow.com/a/15638147
-        return `${url}/${uri}`.replace(/([^:]\/)\/+/g, "$1");
+        return `${ url }/${ uri }`.replace(/([^:]\/)\/+/g, '$1');
     }
 
     function getData<R = any>(response: AxiosResponse<R>): R {

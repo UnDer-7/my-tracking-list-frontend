@@ -27,7 +27,7 @@ export function AuthRoutes({ match: { path } }: RouteComponentProps): ReactEleme
             <Grid item xs={ 12 } sm={ 8 } md={ 5 } component={ Paper } elevation={ 6 } square container>
                 <Switch>
                     {
-                        AuthService.isLoggedIn() && <Redirect to="/dashboard" from={path} />
+                        AuthService.isLoggedIn() && <Redirect to="/dashboard" from={ path }/>
                     }
                     <Route exact
                            path={ AUTH_PREFIX_PATH }

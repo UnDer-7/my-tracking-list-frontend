@@ -1,5 +1,5 @@
-import {useHistory} from "react-router-dom";
-import { AUTH_REGISTER_PATH, AUTH_PREFIX_PATH, AUTH_SIGN_IN_PATH } from '../../page/auth/AuthRoutes';
+import { useHistory } from 'react-router-dom';
+import { AUTH_PREFIX_PATH, AUTH_REGISTER_PATH, AUTH_SIGN_IN_PATH } from '../../page/auth/AuthRoutes';
 import { DASHBOARD_PREFIX_PATH } from '../../page/dashboards/DashboardRoutes';
 
 export function useRoutes() {
@@ -12,8 +12,8 @@ export function useRoutes() {
         goToHome: () => history.push(DASHBOARD_PREFIX_PATH),
         goToAccountDetail: () => history.push('/dashboard/account-detail'),
         lists: {
-            goToDefaultListPage: () => history.push("/dashboard/lists"),
-            goToNewListPage: () => history.push("/dashboard/lists/new"),
+            goToDefaultListPage: () => history.push('/dashboard/lists'),
+            goToNewListPage: () => history.push('/dashboard/lists/new'),
         },
     }
 }

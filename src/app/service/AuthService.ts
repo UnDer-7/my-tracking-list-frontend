@@ -1,4 +1,4 @@
-import { AuthResource }  from '../resources/AuthResource';
+import { AuthResource } from '../resources/AuthResource';
 import { LocalStorageKeys, LocalStorageService } from './LocalStorageService';
 import { decodeJWT } from '../utils/helpers/Helpers';
 import { Token } from '../utils/types/Token';

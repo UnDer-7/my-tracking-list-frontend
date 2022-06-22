@@ -6,7 +6,7 @@ import { NewList } from './NewList';
 export function ListRoute({ location: { pathname }, match: { path } }: RouteComponentProps): ReactElement {
     return (
         <Switch>
-            <Route
+            <Route exact
                 path={ `${ path }` }
                 component={ MyLists }
             />

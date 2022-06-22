@@ -29,7 +29,7 @@ function MenuButton(props: MenuButtonProp): ReactElement {
 
     return (
         <ListItem key={ name } onClick={ onClick } disablePadding>
-            <ListItemButton sx={ { pl: subMenu ? 4 : null } }>
+            <ListItemButton sx={ { pl: subMenu ? 3 : null } }>
                 <ListItemIcon>
                     { icon }
                 </ListItemIcon>

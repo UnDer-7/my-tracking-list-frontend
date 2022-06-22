@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect } from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
-import { Header } from '../../utils/components/Header';
+import { DrawerHeader, Header } from '../../utils/components/Header';
 import { Box } from '@mui/material';
 import { AccountDetail } from './account/AccountDetail';
 import { ListRoute } from './list/ListRoute';
@@ -30,7 +30,7 @@ export function DashboardRoutes({ location: { pathname }, match: { path } }: Rou
             <Box sx={ { display: 'flex' } }>
                 <Header/>
                 <Box component="main" sx={ { flexGrow: 1, p: 3 } }>
-                    {/*<DrawerHeader />*/ }
+                    <DrawerHeader/>
                     <Switch>
                         {
                             canRedirectToListRoutes && (<Redirect to={ DASHBOARD_LISTS_PATH } from={ path }/>)

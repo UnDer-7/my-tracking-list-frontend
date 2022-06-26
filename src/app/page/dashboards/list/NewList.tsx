@@ -1,9 +1,11 @@
+/** @jsxImportSource @emotion/react */
 import React, { ReactElement } from 'react';
 import { z } from 'zod';
 import { Button, Grid, Typography } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CustomInput } from '../../../utils/components/CustomInput';
+import { styled } from '@mui/material/styles';
 
 const NewListFormSchema = z.object({
     listName: z.string()
@@ -14,6 +16,24 @@ const NewListFormSchema = z.object({
 })
 
 type NewListForm = z.infer<typeof NewListFormSchema>
+
+const Form = styled('form')(({ theme }) => ({
+    [theme.breakpoints.up('xs')]: {
+        width: '100%',
+    },
+    [theme.breakpoints.up('sm')]: {
+        width: '90%',
+    },
+    [theme.breakpoints.up('md')]: {
+        width: '85%',
+    },
+    [theme.breakpoints.up('lg')]: {
+        width: '55%',
+    },
+    [theme.breakpoints.up('xl')]: {
+        width: '50%',
+    },
+}));
 
 export function NewList(): ReactElement {
     const { control, handleSubmit } = useForm<NewListForm>({
@@ -27,13 +47,13 @@ export function NewList(): ReactElement {
 
     return (
         <Grid container justifyItems="center" justifyContent="center" alignItems="center" direction="row">
-            <form onSubmit={ handleSubmit(onSubmit) }>
-                <Grid item xs={ 12 }>
+            <Form onSubmit={ handleSubmit(onSubmit) }>
+                <Grid item xs={ 12 } textAlign="center">
                     <Typography variant="h3">
-                        Create a New List
+                        New List
                     </Typography>
                 </Grid>
-                <Grid item xs={ 12 }>
+                <Grid item xs={ 12 } paddingTop={ 3 }>
                     <CustomInput
                         name="listName"
                         fieldLabel="List Name"
@@ -41,7 +61,7 @@ export function NewList(): ReactElement {
                         defaultValue=""
                     />
                 </Grid>
-                <Grid item xs={ 12 }>
+                <Grid item xs={ 12 } paddingTop={ 3 }>
                     <CustomInput
                         name="listType"
                         fieldLabel="List Type"
@@ -49,10 +69,10 @@ export function NewList(): ReactElement {
                         defaultValue=""
                     />
                 </Grid>
-                <Grid item xs={ 12 }>
+                <Grid container item xs={ 12 } justifyContent="flex-end">
                     <Button type="submit">Save</Button>
                 </Grid>
-            </form>
+            </Form>
         </Grid>
     );
 }

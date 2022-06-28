@@ -1,11 +1,12 @@
 /** @jsxImportSource @emotion/react */
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { z } from 'zod';
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, FormControl, Grid, MenuItem, Select, Typography } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CustomInput } from '../../../utils/components/CustomInput';
 import { styled } from '@mui/material/styles';
+import { Search as SearchIcon } from '@mui/icons-material';
 
 const NewListFormSchema = z.object({
     listName: z.string()
@@ -15,7 +16,12 @@ const NewListFormSchema = z.object({
     listType: z.string().min(1, 'Field is required')
 })
 
+const SearchFormSchema = z.object({
+    searchArgs: z.string().trim().min(1, 'Field is required')
+});
+
 type NewListForm = z.infer<typeof NewListFormSchema>
+type SearchFormType = z.infer<typeof SearchFormSchema>
 
 const Form = styled('form')(({ theme }) => ({
     [theme.breakpoints.up('xs')]: {
@@ -36,13 +42,14 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 export function NewList(): ReactElement {
-    const { control, handleSubmit } = useForm<NewListForm>({
-        resolver: zodResolver(NewListFormSchema),
-        mode: 'all'
+    const { control, handleSubmit } = useForm<SearchFormType>({
+        resolver: zodResolver(SearchFormSchema),
+        mode: 'onSubmit'
     });
 
-    const onSubmit: SubmitHandler<NewListForm> = (data) => {
-        console.log('SUBMITED: ', data);
+    const [listType, setListType] = useState<'TV' | 'GAMES' | 'MOVIES'>('TV')
+    const onSubmit: SubmitHandler<SearchFormType> = (data) => {
+        console.log('SUBMITTED: ', data);
     }
 
     return (
@@ -53,25 +60,37 @@ export function NewList(): ReactElement {
                         New List
                     </Typography>
                 </Grid>
-                <Grid item xs={ 12 } paddingTop={ 3 }>
-                    <CustomInput
-                        name="listName"
-                        fieldLabel="List Name"
-                        control={ control }
-                        defaultValue=""
-                    />
+                <Grid container direction="row" justifyContent="space-around" spacing={ 1 }>
+                    <Grid item xs={ 1 }>
+                        <FormControl variant="standard">
+                            <Select label="Type" autoWidth={ false } value={ listType }
+                                    onChange={ (e) => setListType(e.target.value as any) }>
+                                <MenuItem value="TV">TV</MenuItem>
+                                <MenuItem value="GAMES">Games</MenuItem>
+                                <MenuItem value="MOVIES">Movies</MenuItem>
+                                <MenuItem value="MOVIES">Movies</MenuItem>
+                            </Select>
+
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={ 10 }>
+                        <CustomInput
+                            name="searchArgs"
+                            control={ control }
+                            fieldPlaceholder="Search"
+                            defaultValue=""
+                            TextFieldProps={ { variant: 'standard' } }
+                        />
+                    </Grid>
+                    <Grid item xs={ 1 }>
+                        <Button type="submit" startIcon={ <SearchIcon/> } variant="contained">
+                            Search
+                        </Button>
+                    </Grid>
                 </Grid>
-                <Grid item xs={ 12 } paddingTop={ 3 }>
-                    <CustomInput
-                        name="listType"
-                        fieldLabel="List Type"
-                        control={ control }
-                        defaultValue=""
-                    />
-                </Grid>
-                <Grid container item xs={ 12 } justifyContent="flex-end">
-                    <Button type="submit">Save</Button>
-                </Grid>
+                {/*<Grid container item xs={ 12 } justifyContent="flex-end">*/}
+                {/*    <Button>Save</Button>*/}
+                {/*</Grid>*/}
             </Form>
         </Grid>
     );

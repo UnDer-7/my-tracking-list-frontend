@@ -1,19 +1,29 @@
 /** @jsxImportSource @emotion/react */
 import React, { ReactElement, useState } from 'react';
 import { z } from 'zod';
-import { Button, FormControl, Grid, MenuItem, Select, Typography } from '@mui/material';
+import {
+    Button,
+    CircularProgress,
+    Divider,
+    FormControl,
+    Grid,
+    MenuItem,
+    Select,
+    TextField,
+    Typography
+} from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CustomInput } from '../../../utils/components/CustomInput';
 import { styled } from '@mui/material/styles';
-import { Search as SearchIcon } from '@mui/icons-material';
+import { AddBox as AddBoxIcon, Save as SaveIcon } from '@mui/icons-material';
 
 const NewListFormSchema = z.object({
     listName: z.string()
+        .trim()
         .min(1, 'Field is required')
-        .max(255, 'Maximum of 255 characters')
-        .trim(),
-    listType: z.string().min(1, 'Field is required')
+        .max(255, 'Maximum of 255 characters'),
+    description: z.string().trim(),
 })
 
 const SearchFormSchema = z.object({
@@ -46,6 +56,10 @@ export function NewList(): ReactElement {
         resolver: zodResolver(SearchFormSchema),
         mode: 'onSubmit'
     });
+    const { control: controlListForm, handleSubmit: handleSubmitListForm } = useForm<NewListForm>({
+        resolver: zodResolver(NewListFormSchema),
+        mode: 'all'
+    });
 
     const [listType, setListType] = useState<'TV' | 'GAMES' | 'MOVIES'>('TV')
     const onSubmit: SubmitHandler<SearchFormType> = (data) => {
@@ -60,37 +74,71 @@ export function NewList(): ReactElement {
                         New List
                     </Typography>
                 </Grid>
-                <Grid container direction="row" justifyContent="space-around" spacing={ 1 }>
-                    <Grid item xs={ 1 }>
-                        <FormControl variant="standard">
-                            <Select label="Type" autoWidth={ false } value={ listType }
-                                    onChange={ (e) => setListType(e.target.value as any) }>
-                                <MenuItem value="TV">TV</MenuItem>
-                                <MenuItem value="GAMES">Games</MenuItem>
-                                <MenuItem value="MOVIES">Movies</MenuItem>
-                                <MenuItem value="MOVIES">Movies</MenuItem>
-                            </Select>
 
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={ 10 }>
+                <Grid item paddingTop={ 3 } paddingBottom={ 3 }>
+                    <Divider/>
+                </Grid>
+
+                <Grid container justifyContent="space-around" spacing={ 1 }>
+                    <Grid item xs={ 12 } md={ 6 }>
                         <CustomInput
-                            name="searchArgs"
-                            control={ control }
-                            fieldPlaceholder="Search"
+                            control={ controlListForm }
                             defaultValue=""
+                            name="listName"
+                            fieldPlaceholder="List Name"
                             TextFieldProps={ { variant: 'standard' } }
                         />
                     </Grid>
-                    <Grid item xs={ 1 }>
-                        <Button type="submit" startIcon={ <SearchIcon/> } variant="contained">
-                            Search
-                        </Button>
+                    <Grid item xs={ 12 } md={ 6 }>
+                        <CustomInput
+                            control={ controlListForm }
+                            defaultValue=""
+                            name="description"
+                            TextFieldProps={ {
+                                variant: 'filled',
+                                multiline: true,
+                                rows: 4,
+                                label: 'Description'
+                            } }
+                        />
                     </Grid>
                 </Grid>
-                {/*<Grid container item xs={ 12 } justifyContent="flex-end">*/}
-                {/*    <Button>Save</Button>*/}
-                {/*</Grid>*/}
+
+                <Grid container justifyContent="space-around" paddingTop={ 3 }>
+                    <Grid container xs={ 9 }>
+                        <Grid item xs={ 2 }>
+                            <FormControl variant="standard">
+                                <Select label="Type" autoWidth={ false } value={ listType }
+                                        onChange={ (e) => setListType(e.target.value as any) }>
+                                    <MenuItem value="TV">TV</MenuItem>
+                                    <MenuItem value="GAMES">Games</MenuItem>
+                                    <MenuItem value="MOVIES">Movies</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={ 9 }>
+                            <TextField
+                                fullWidth
+                                placeholder="Search"
+                                variant="standard"
+                                InputProps={ {
+                                    endAdornment: (
+                                        <CircularProgress/>
+                                    )
+                                } }
+                            />
+                        </Grid>
+                        <Grid item xs={ 1 }>
+                            <Button type="button" startIcon={ <AddBoxIcon/> } variant="contained">
+                                Add
+                            </Button>
+                        </Grid>
+                    </Grid>
+
+                    <Grid container item xs={ 3 } justifyContent="flex-end">
+                        <Button variant="contained" startIcon={ <SaveIcon/> }>Save</Button>
+                    </Grid>
+                </Grid>
             </Form>
         </Grid>
     );

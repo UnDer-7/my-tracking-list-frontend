@@ -104,6 +104,7 @@ export function NewList(): ReactElement {
                     </Grid>
                 </Grid>
 
+                {/*     ADICIONAR UMA MODAL COM UMA TABELA PARA ADICIONAR OS CONTENTS    */}
                 <Grid container justifyContent="space-around" paddingTop={ 3 }>
                     <Grid item container xs={ 9 } alignItems="flex-end">
                         <Grid item xs={ 1.50 }>

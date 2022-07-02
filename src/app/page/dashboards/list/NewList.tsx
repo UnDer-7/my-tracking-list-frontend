@@ -105,10 +105,10 @@ export function NewList(): ReactElement {
                 </Grid>
 
                 <Grid container justifyContent="space-around" paddingTop={ 3 }>
-                    <Grid container xs={ 9 }>
-                        <Grid item xs={ 2 }>
+                    <Grid item container xs={ 9 } alignItems="flex-end">
+                        <Grid item xs={ 1.50 }>
                             <FormControl variant="standard">
-                                <Select label="Type" autoWidth={ false } value={ listType }
+                                <Select autoWidth={ true } value={ listType }
                                         onChange={ (e) => setListType(e.target.value as any) }>
                                     <MenuItem value="TV">TV</MenuItem>
                                     <MenuItem value="GAMES">Games</MenuItem>
@@ -116,7 +116,7 @@ export function NewList(): ReactElement {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={ 9 }>
+                        <Grid item xs={ 9.5 }>
                             <TextField
                                 fullWidth
                                 placeholder="Search"

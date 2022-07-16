@@ -14,9 +14,10 @@ import {
 } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CustomInput } from '../../../utils/components/CustomInput';
+import { CustomInput } from '../../../../utils/components/CustomInput';
 import { styled } from '@mui/material/styles';
 import { AddBox as AddBoxIcon, Save as SaveIcon } from '@mui/icons-material';
+import { ResultTable } from './ResultTable';
 
 const NewListFormSchema = z.object({
     listName: z.string()
@@ -61,7 +62,7 @@ export function NewList(): ReactElement {
         mode: 'all'
     });
 
-    const [listType, setListType] = useState<'TV' | 'GAMES' | 'MOVIES'>('TV')
+
     const onSubmit: SubmitHandler<SearchFormType> = (data) => {
         console.log('SUBMITTED: ', data);
     }
@@ -104,42 +105,47 @@ export function NewList(): ReactElement {
                     </Grid>
                 </Grid>
 
-                {/*     ADICIONAR UMA MODAL COM UMA TABELA PARA ADICIONAR OS CONTENTS    */}
-                <Grid container justifyContent="space-around" paddingTop={ 3 }>
-                    <Grid item container xs={ 9 } alignItems="flex-end">
-                        <Grid item xs={ 1.50 }>
-                            <FormControl variant="standard">
-                                <Select autoWidth={ true } value={ listType }
-                                        onChange={ (e) => setListType(e.target.value as any) }>
-                                    <MenuItem value="TV">TV</MenuItem>
-                                    <MenuItem value="GAMES">Games</MenuItem>
-                                    <MenuItem value="MOVIES">Movies</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={ 9.5 }>
-                            <TextField
-                                fullWidth
-                                placeholder="Search"
-                                variant="standard"
-                                InputProps={ {
-                                    endAdornment: (
-                                        <CircularProgress/>
-                                    )
-                                } }
-                            />
-                        </Grid>
-                        <Grid item xs={ 1 }>
-                            <Button type="button" startIcon={ <AddBoxIcon/> } variant="contained">
-                                Add
-                            </Button>
-                        </Grid>
-                    </Grid>
-
-                    <Grid container item xs={ 3 } justifyContent="flex-end">
-                        <Button variant="contained" startIcon={ <SaveIcon/> }>Save</Button>
-                    </Grid>
+                <Grid item paddingTop={ 3 } paddingBottom={ 3 }>
+                    <Divider/>
                 </Grid>
+
+                <ResultTable />
+                {/*     ADICIONAR UMA MODAL COM UMA TABELA PARA ADICIONAR OS CONTENTS    */}
+                {/*<Grid container justifyContent="space-around" paddingTop={ 3 }>*/}
+                {/*    <Grid item container xs={ 9 } alignItems="flex-end">*/}
+                {/*        <Grid item xs={ 1.50 }>*/}
+                {/*            <FormControl variant="standard">*/}
+                {/*                <Select autoWidth={ true } value={ listType }*/}
+                {/*                        onChange={ (e) => setListType(e.target.value as any) }>*/}
+                {/*                    <MenuItem value="TV">TV</MenuItem>*/}
+                {/*                    <MenuItem value="GAMES">Games</MenuItem>*/}
+                {/*                    <MenuItem value="MOVIES">Movies</MenuItem>*/}
+                {/*                </Select>*/}
+                {/*            </FormControl>*/}
+                {/*        </Grid>*/}
+                {/*        <Grid item xs={ 9.5 }>*/}
+                {/*            <TextField*/}
+                {/*                fullWidth*/}
+                {/*                placeholder="Search"*/}
+                {/*                variant="standard"*/}
+                {/*                InputProps={ {*/}
+                {/*                    endAdornment: (*/}
+                {/*                        <CircularProgress/>*/}
+                {/*                    )*/}
+                {/*                } }*/}
+                {/*            />*/}
+                {/*        </Grid>*/}
+                {/*        <Grid item xs={ 1 }>*/}
+                {/*            <Button type="button" startIcon={ <AddBoxIcon/> } variant="contained">*/}
+                {/*                Add*/}
+                {/*            </Button>*/}
+                {/*        </Grid>*/}
+                {/*    </Grid>*/}
+
+                {/*    <Grid container item xs={ 3 } justifyContent="flex-end">*/}
+                {/*        <Button variant="contained" startIcon={ <SaveIcon/> }>Save</Button>*/}
+                {/*    </Grid>*/}
+                {/*</Grid>*/}
             </Form>
         </Grid>
     );

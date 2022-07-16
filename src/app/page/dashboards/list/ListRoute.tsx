@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { MyLists } from './MyLists';
-import { NewList } from './NewList';
+import { NewList } from './newlist/NewList';
 
 export function ListRoute({ location: { pathname }, match: { path } }: RouteComponentProps): ReactElement {
     return (

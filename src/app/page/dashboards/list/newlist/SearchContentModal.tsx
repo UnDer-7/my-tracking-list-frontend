@@ -39,7 +39,7 @@ const SearchFormSchema = z.object({
 
 type SearchFormType = z.infer<typeof SearchFormSchema>
 
-const rows = Array(5).fill(0).map((_, i) => (
+const rows = Array(20).fill(0).map((_, i) => (
     { id: i, poster: 'link', title: 'Sopranos', releaseDate: '1999' }
 ));
 
@@ -163,10 +163,10 @@ export function SearchContentModal({ isOpen, onClose }: SearchContentModalType):
                             </Table>
                         </TableContainer>
                         <TablePagination
-                            rowsPerPageOptions={ [5, 10, 25] }
+                            rowsPerPageOptions={[20]}
                             component="div"
                             count={ rows.length }
-                            rowsPerPage={ 5 }
+                            rowsPerPage={ 20 } // API do Movie DB sempre retorna 20
                             page={ 1 }
                             onPageChange={ (_, page) => {
                                 console.log('Page Change ', page);
